@@ -1,15 +1,10 @@
 import streamlit as st
 import pandas as pd
-import spacy
-from annotated_text import annotated_text
-# Load SpaCy model
-nlp = spacy.load("en_core_web_sm")
-
 
 st.title('GBM Journal Abstract Explorer')
 st.write('A tool to explore abstracts from the PubMed abstracts for the keyword "Glioblastoma" from 1951-2020.')
 # load data 
-file_path = 'data/gbm_abstracts.tsv.zip'
+file_path = 'data/gbm_abstracts.zip'
 
 @st.cache_data 
 def load_data(file_path):
@@ -17,16 +12,6 @@ def load_data(file_path):
     # remove duplicates from Abstract column
     df.drop_duplicates(subset='Abstract', inplace=True)
     return df
-
-def get_annotated_data(text):
-    doc = nlp(text)
-    annotated_data = []
-
-    for token in doc:
-        annotated_data.append((token.text, token.pos_))
-        annotated_data.append(" ")
-
-    return tuple(annotated_data)
 
 raw_data = load_data(file_path)
 raw_article_count = len(raw_data)
